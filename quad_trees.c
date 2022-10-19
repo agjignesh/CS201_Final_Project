@@ -12,6 +12,7 @@ struct point {
 typedef struct point point;
 
 point* newpoint(int x,int y){
+    // creates a new point
     point* p = malloc(sizeof(point));
     p->x = x;
     p->y = y;
@@ -21,6 +22,7 @@ point* newpoint(int x,int y){
 // chech if two points are equal
 
 int equal(point* p1,point* p2){
+    // checks if two points are equal
     return (p1->x == p2->x && p1->y == p2->y);
 }
 
