@@ -27,6 +27,7 @@ int equal(point* p1,point* p2){
 // region 
 // we are moving in clock wise direction always for region
 
+
 struct region {
     point* p1; // top left
     point* p2; // top right
