@@ -1,17 +1,18 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<math.h>
+#include<float.h>
 
 // points
 
 struct point {
-    int x;
-    int y;
+    float x;
+    float y;
 };
 
 typedef struct point point;
 
-point* newpoint(int x,int y){
+point* newpoint(float x,float y){
     // creates a new point
     point* p = malloc(sizeof(point));
     p->x = x;
@@ -65,8 +66,8 @@ int findregion(point*p, region* r){
     // 3 for bottom right S/E
     // 4 for bottom left S/W
 
-    int xmid = (r->p1->x + r->p2->x)/2;
-    int ymid = (r->p1->y + r->p4->y)/2;
+    float xmid = (r->p1->x + r->p2->x)/2;
+    float ymid = (r->p1->y + r->p4->y)/2;
     if(p->x <= xmid && p->y <= ymid){
         return 1;
     }
@@ -154,14 +155,14 @@ void insertquadtree(quadtree* qt,point* p){
 // searching in quad tree
 
 int searchquadtree(quadtree* qt,point* p){
-    if (qt == NULL){
+    if (qt->p == NULL){
         // base case for recursion
         return 0;
     }
     else{
         if (equal(qt->p,p)){
             // also base case for recursion
-            return 1; // the point is foud
+            return 1; // the point is found
         }
         else {
             int region = findregion(p,qt->r);
@@ -189,10 +190,10 @@ int main(){
     point* p4 = newpoint(0,32);
     quadtree* qt = newquadtree(p1,p2,p3,p4);
     point* p = newpoint(5,5);
-    point* a = newpoint(10,10);
-    point* b = newpoint(10,5);
+    printf("%f\n",p->x);
+    point* a = newpoint(16,16);
     insertquadtree(qt,p);
     insertquadtree(qt,a);
-    printf("%d",searchquadtree(qt,b));
+    printf("%d",searchquadtree(qt,a));
     return 0;
 }
