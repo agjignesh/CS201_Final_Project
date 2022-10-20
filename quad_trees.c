@@ -110,9 +110,9 @@ quadtree* newquadtree(point* p1,point* p2,point* p3,point* p4){
 
 // insert in quad tree
 
-quadtree* insertquadtree(quadtree* qt,point* p){
+void insertquadtree(quadtree* qt,point* p){
     if (qt == NULL){
-        return NULL;
+        ;
     }
     else if (ispointinregion(p,qt->r)){
         if (qt->p == NULL){
@@ -129,27 +129,25 @@ quadtree* insertquadtree(quadtree* qt,point* p){
             qt->ne= newquadtree(tophalf,qt->r->p2,righthalf,center);
             qt->se= newquadtree(center,righthalf,qt->r->p3,bottomhalf);
             qt->sw= newquadtree(lefthalf,center,bottomhalf,qt->r->p4);
-            return qt;
         }
         else {
             // if there is a point in the tree then we insert the point in the appropriate child
             if (ispointinregion(p,qt->nw->r)){
-                return insertquadtree(qt->nw,p);
+                insertquadtree(qt->nw,p);
             }
             else if (ispointinregion(p,qt->ne->r)){
-                return insertquadtree(qt->ne,p);
+                insertquadtree(qt->ne,p);
             }
             else if (ispointinregion(p,qt->se->r)){
-                return insertquadtree(qt->se,p);
+                insertquadtree(qt->se,p);
             }
             else if (ispointinregion(p,qt->sw->r)){
-                return insertquadtree(qt->sw,p);
+                insertquadtree(qt->sw,p);
             }
         }
     }
     else {
         printf("point not in region");
-        return qt;
     }
 }
 
@@ -191,7 +189,10 @@ int main(){
     point* p4 = newpoint(0,32);
     quadtree* qt = newquadtree(p1,p2,p3,p4);
     point* p = newpoint(5,5);
-    qt = insertquadtree(qt,p);
-    printf("%d",searchquadtree(qt,p));
+    point* a = newpoint(10,10);
+    point* b = newpoint(10,5);
+    insertquadtree(qt,p);
+    insertquadtree(qt,a);
+    printf("%d",searchquadtree(qt,b));
     return 0;
 }
