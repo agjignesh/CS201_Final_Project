@@ -218,6 +218,7 @@ void range_query(quadtree* qt,region* r)
 }
 
 int main(){
+    // code by Jignesh Test passed
     point* p1 = newpoint(0,0);
     point* p2 = newpoint(32,0);
     point* p3 = newpoint(32,32);
@@ -229,5 +230,9 @@ int main(){
     insertquadtree(qt,p);
     insertquadtree(qt,a);
     printf("%d",searchquadtree(qt,a));
+
+    // code check by kritika 
+    
+
     return 0;
 }
