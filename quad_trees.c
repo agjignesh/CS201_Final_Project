@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<math.h>
 #include<float.h>
+#include<stdbool.h>
 
 // points
 
@@ -81,6 +82,25 @@ int findregion(point*p, region* r){
         return 4;
     }
     return 0;
+}
+
+bool box_intersect_check(region* b1,region* b2)
+{
+    if(b1->p2->x > b2->p1->x && b1->p2->x < b2->p2->x)
+    {
+        if(b1->p3->y < b2->p1->y && b1->p3->y > b2->p3->y)
+            return true;
+        else if(b1->p1->y < b2->p1->y && b1->p1->y > b2->p3->y)
+            return true;
+    }
+    else if(b1->p1->x < b2->p2->x && b1->p1->x > b2->p1->x)
+    {
+        if(b1->p1->y < b2->p1->y && b1->p1->y > b2->p3->y)
+            return true;
+        else if(b1->p3->y < b2->p1->y && b1->p3->y > b2->p3->y)
+            return true;
+    }
+    return false;
 }
 
 // quad tree
@@ -181,6 +201,20 @@ int searchquadtree(quadtree* qt,point* p){
         }
 
     }
+}
+
+void range_query(quadtree* qt,region* r)
+{
+    if(!box_intersect_check(qt->r,r))
+    {
+        return;
+    }
+    if(ispointinregion(qt->p, r)==1)
+        printf("%d ",qt->p);
+    range_query(qt->nw,r);
+    range_query(qt->ne,r);
+    range_query(qt->se,r);
+    range_query(qt->sw,r);
 }
 
 int main(){
