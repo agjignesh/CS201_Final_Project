@@ -210,7 +210,7 @@ void range_query(quadtree* qt,region* r)
         return;
     }
     if(ispointinregion(qt->p, r)==1)
-        printf("%d ",qt->p);
+        printf("%f %f\n",qt->p->x,qt->p->y);
     range_query(qt->nw,r);
     range_query(qt->ne,r);
     range_query(qt->se,r);
@@ -219,19 +219,114 @@ void range_query(quadtree* qt,region* r)
 
 int main(){
     // code by Jignesh Test passed
-    point* p1 = newpoint(0,0);
-    point* p2 = newpoint(32,0);
-    point* p3 = newpoint(32,32);
-    point* p4 = newpoint(0,32);
-    quadtree* qt = newquadtree(p1,p2,p3,p4);
-    point* p = newpoint(5,5);
-    printf("%f\n",p->x);
-    point* a = newpoint(16,16);
-    insertquadtree(qt,p);
-    insertquadtree(qt,a);
-    printf("%d",searchquadtree(qt,a));
+    // point* p1 = newpoint(0,0);
+    // point* p2 = newpoint(32,0);
+    // point* p3 = newpoint(32,32);
+    // point* p4 = newpoint(0,32);
+    // quadtree* qt = newquadtree(p1,p2,p3,p4);
+    // point* p = newpoint(5,5);
+    // printf("%f\n",p->x);
+    // point* a = newpoint(16,16);
+    // insertquadtree(qt,p);
+    // insertquadtree(qt,a);
+    // printf("%f",searchquadtree(qt,a));
 
     // code check by kritika 
+    int choice = 1;
+    quadtree *qt = NULL;
+    while (1)
+    {
+        if (choice == 1)
+        {
+            /* code */
+            printf("To make the quad tree please enter all the four points of parallelogram in clockwise direction\n");
+            int x1, y1, x2, y2, x3, y3, x4, y4;
+            printf("Enter first point: ");
+            scanf("%f", &x1);
+            scanf("%f", &y1);          
+            printf("Enter second point: ");
+            scanf("%f", &x2);
+            scanf("%f", &y2);
+            printf("Enter third point: ");
+            scanf("%f", &x3);
+            scanf("%f", &y3);
+            printf("Enter fourth point: ");
+            scanf("%f", &x4);
+            scanf("%f", &y4);
+            point *p1 = newpoint(x1, y1);
+            point *p2 = newpoint(x2, y2);
+            point *p3 = newpoint(x3, y3);
+            point *p4 = newpoint(x4, y4);
+            qt = newquadtree(p1, p2, p3, p4);
+        }
+        else if (choice == 2)
+        {
+            /* code */
+            printf("Enter the point to be inserted: ");
+            int x, y;
+            scanf("%f", &x);
+            scanf("%f", &y);
+            point *p = newpoint(x, y);
+            insertquadtree(qt, p);
+            printf("Point inserted \n");
+        }
+        else if (choice == 3)
+        {
+            /* code */
+            printf("Enter the point to be searched: ");
+            int x, y;
+            scanf("%f", &x);
+            scanf("%f", &y);
+            point *p = newpoint(x, y);
+            int result = searchquadtree(qt, p);
+            if (result == 1)
+            {
+                printf("Point found\n");
+            }
+            else
+            {
+                printf("Point not found\n");
+            }
+        }
+        else if (choice ==4)
+        {
+            /* code */
+            printf("Enter the range of points to be searched in clockwise direction\n");
+            int x1, y1, x2, y2, x3, y3, x4, y4;
+            printf("Enter first point: ");
+            scanf("%f", &x1);
+            scanf("%f", &y1);
+            printf("Enter second point: ");
+            scanf("%f", &x2);
+            scanf("%f", &y2);
+            printf("Enter third point: ");
+            scanf("%f", &x3);
+            scanf("%f", &y3);
+            printf("Enter fourth point: ");
+            scanf("%f", &x4);
+            scanf("%f", &y4);
+            point *p1 = newpoint(x1, y1);
+            point *p2 = newpoint(x2, y2);
+            point *p3 = newpoint(x3, y3);
+            point *p4 = newpoint(x4, y4);
+            region *r = newregion(p1, p2, p3, p4);
+            printf("Points in the range are");
+            range_query(qt, r);
+        }
+        else if (choice == 5)
+        {
+            /* code */
+            printf("Thank you for using the program");
+            break;
+        }
+    
+
+
+        printf("\nEnter the number corresponding to the operation you want to perform\n1. To create a new quad tree\n2. To insert an element into it\n");
+        printf("3. Search an element\n4. Perform range query\n5. To EXIT\n");
+        printf("Enter your choice :");
+        scanf("%d", &choice);
+    }
     
 
     return 0;
