@@ -15,7 +15,7 @@ typedef struct point point;
 
 point* newpoint(float x,float y){
     // creates a new point
-    point* p = malloc(sizeof(point));
+    point* p = (point*)malloc(sizeof(point));
     p->x = x;
     p->y = y;
     return p;
@@ -42,7 +42,7 @@ struct region {
 typedef struct region region;
 
 region* newregion(point* p1,point* p2,point* p3,point* p4){
-    region* r = malloc(sizeof(region));
+    region* r = (region*)malloc(sizeof(region));
     r->p1 = p1;
     r->p2 = p2;
     r->p3 = p3;
@@ -53,7 +53,8 @@ region* newregion(point* p1,point* p2,point* p3,point* p4){
 //find if point in region or not
 
 int ispointinregion(point* p,region* r){
-    if(p->x >= r->p1->x && p->x <= r->p2->x && p->y >= r->p1->y && p->y <= r->p4->y){
+    if(p->x >= r->p1->x && p->x <= r->p2->x && p->y <= r->p1->y && p->y >= r->p4->y){
+        
         return 1;
     }
     return 0;
@@ -69,16 +70,16 @@ int findregion(point*p, region* r){
 
     float xmid = (r->p1->x + r->p2->x)/2;
     float ymid = (r->p1->y + r->p4->y)/2;
-    if(p->x <= xmid && p->y <= ymid){
+    if(p->x <= xmid && p->y >= ymid){
         return 1;
     }
-    else if(p->x >= xmid && p->y <= ymid){
+    else if(p->x >= xmid && p->y >= ymid){
         return 2;
     }
-    else if(p->x >= xmid && p->y >= ymid){
+    else if(p->x >= xmid && p->y <= ymid){
         return 3;
     }
-    else if(p->x <= xmid && p->y >= ymid){
+    else if(p->x <= xmid && p->y <= ymid){
         return 4;
     }
     return 0;
@@ -86,18 +87,18 @@ int findregion(point*p, region* r){
 
 bool box_intersect_check(region* b1,region* b2)
 {
-    if(b1->p2->x > b2->p1->x && b1->p2->x < b2->p2->x)
+    if(b1->p2->x >= b2->p1->x && b1->p2->x <= b2->p2->x)
     {
-        if(b1->p3->y < b2->p1->y && b1->p3->y > b2->p3->y)
+        if(b1->p3->y <= b2->p1->y && b1->p3->y >= b2->p3->y)
             return true;
-        else if(b1->p1->y < b2->p1->y && b1->p1->y > b2->p3->y)
+        else if(b1->p1->y <= b2->p1->y && b1->p1->y >= b2->p3->y)
             return true;
     }
-    else if(b1->p1->x < b2->p2->x && b1->p1->x > b2->p1->x)
+    else if(b1->p1->x <= b2->p2->x && b1->p1->x >= b2->p1->x)
     {
-        if(b1->p1->y < b2->p1->y && b1->p1->y > b2->p3->y)
+        if(b1->p1->y <= b2->p1->y && b1->p1->y >= b2->p3->y)
             return true;
-        else if(b1->p3->y < b2->p1->y && b1->p3->y > b2->p3->y)
+        else if(b1->p3->y <= b2->p1->y && b1->p3->y >= b2->p3->y)
             return true;
     }
     return false;
@@ -120,22 +121,23 @@ typedef struct quadtree quadtree;
 
 quadtree* newquadtree(point* p1,point* p2,point* p3,point* p4){
     // creates an empty quad tree whose region top left point is p1 and bottom right point is p3
-    quadtree* qt = malloc(sizeof(quadtree));
+    quadtree* qt = (quadtree*)malloc(sizeof(quadtree));
     qt->p = NULL;
     qt->nw = NULL;
     qt->ne = NULL;
     qt->se = NULL;
     qt->sw = NULL;
     qt->r = newregion(p1,p2,p3,p4);
+    return qt;
 }
 
 // insert in quad tree
 
 void insertquadtree(quadtree* qt,point* p){
     if (qt == NULL){
-        ;
+        return;
     }
-    else if (ispointinregion(p,qt->r)){
+    else if (ispointinregion(p,qt->r)==1){
         if (qt->p == NULL){
             // base case for recursion
             // if there is no point then we insert the point in the tree
@@ -168,6 +170,7 @@ void insertquadtree(quadtree* qt,point* p){
         }
     }
     else {
+
         printf("point not in region");
     }
 }
@@ -203,35 +206,25 @@ int searchquadtree(quadtree* qt,point* p){
     }
 }
 
-void range_query(quadtree* qt,region* r)
+void range_query(quadtree* qt,region* re)
 {
-    if(!box_intersect_check(qt->r,r))
+    if(qt==NULL || qt->p==NULL)
+        return;
+    if(!box_intersect_check(qt->r,re))
     {
         return;
     }
-    if(ispointinregion(qt->p, r)==1)
+    if(ispointinregion(qt->p, re)==1)
+    {
         printf("%f %f\n",qt->p->x,qt->p->y);
-    range_query(qt->nw,r);
-    range_query(qt->ne,r);
-    range_query(qt->se,r);
-    range_query(qt->sw,r);
+    }
+    range_query(qt->nw,re);
+    range_query(qt->ne,re);
+    range_query(qt->se,re);
+    range_query(qt->sw,re);
 }
 
 int main(){
-    // code by Jignesh Test passed
-    // point* p1 = newpoint(0,0);
-    // point* p2 = newpoint(32,0);
-    // point* p3 = newpoint(32,32);
-    // point* p4 = newpoint(0,32);
-    // quadtree* qt = newquadtree(p1,p2,p3,p4);
-    // point* p = newpoint(5,5);
-    // printf("%f\n",p->x);
-    // point* a = newpoint(16,16);
-    // insertquadtree(qt,p);
-    // insertquadtree(qt,a);
-    // printf("%f",searchquadtree(qt,a));
-
-    // code check by kritika 
     int choice = 1;
     quadtree *qt = NULL;
     while (1)
@@ -240,10 +233,10 @@ int main(){
         {
             /* code */
             printf("To make the quad tree please enter all the four points of parallelogram in clockwise direction\n");
-            int x1, y1, x2, y2, x3, y3, x4, y4;
+            float x1, y1, x2, y2, x3, y3, x4, y4;
             printf("Enter first point: ");
             scanf("%f", &x1);
-            scanf("%f", &y1);          
+            scanf("%f", &y1);  
             printf("Enter second point: ");
             scanf("%f", &x2);
             scanf("%f", &y2);
@@ -263,7 +256,7 @@ int main(){
         {
             /* code */
             printf("Enter the point to be inserted: ");
-            int x, y;
+            float x, y;
             scanf("%f", &x);
             scanf("%f", &y);
             point *p = newpoint(x, y);
@@ -274,7 +267,7 @@ int main(){
         {
             /* code */
             printf("Enter the point to be searched: ");
-            int x, y;
+            float x, y;
             scanf("%f", &x);
             scanf("%f", &y);
             point *p = newpoint(x, y);
@@ -292,7 +285,7 @@ int main(){
         {
             /* code */
             printf("Enter the range of points to be searched in clockwise direction\n");
-            int x1, y1, x2, y2, x3, y3, x4, y4;
+            float x1, y1, x2, y2, x3, y3, x4, y4;
             printf("Enter first point: ");
             scanf("%f", &x1);
             scanf("%f", &y1);
@@ -310,7 +303,7 @@ int main(){
             point *p3 = newpoint(x3, y3);
             point *p4 = newpoint(x4, y4);
             region *r = newregion(p1, p2, p3, p4);
-            printf("Points in the range are");
+            printf("Points in the range are: \n");
             range_query(qt, r);
         }
         else if (choice == 5)
