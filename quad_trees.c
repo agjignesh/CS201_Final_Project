@@ -42,6 +42,7 @@ struct region {
 typedef struct region region;
 
 region* newregion(point* p1,point* p2,point* p3,point* p4){
+    // creates new region
     region* r = (region*)malloc(sizeof(region));
     r->p1 = p1;
     r->p2 = p2;
@@ -68,7 +69,7 @@ int findregion(point*p, region* r){
     // 2 for top right N/E
     // 3 for bottom right S/E
     // 4 for bottom left S/W
-
+    // tells in which sub region the point should go
     float xmid = (r->p1->x + r->p2->x)/2;
     float ymid = (r->p1->y + r->p4->y)/2;
     if(p->x <= xmid && p->y >= ymid){
@@ -88,6 +89,7 @@ int findregion(point*p, region* r){
 
 int box_intersect_check(region* b1,region* b2)
 {
+    // checks if two region intersect, if one region is another
     if(b2->p1->x > b1->p1->x && b2->p2->x < b1->p2->x && b2->p1->y < b1->p1->y && b2->p3->y > b1->p3->y)
         return 1;
     else if(b2->p1->x < b1->p1->x && b2->p2->x > b1->p2->x && b2->p1->y > b1->p1->y && b2->p3->y < b1->p3->y)
@@ -193,6 +195,7 @@ int searchquadtree(quadtree* qt,point* p){
             return 1; // the point is found
         }
         else {
+            // determines in which sub region the point is and goes into that region 
             int region = findregion(p,qt->r);
             if (region == 1){
                 return searchquadtree(qt->nw,p);
@@ -213,6 +216,7 @@ int searchquadtree(quadtree* qt,point* p){
 
 void range_query(quadtree* qt,region* re)
 {
+    // prints all the points that are present in the region
     if(qt==NULL || qt->p==NULL)
         return;
     if(box_intersect_check(qt->r,re)==0)
@@ -234,6 +238,12 @@ void range_query(quadtree* qt,region* re)
 }
 
 int main(){
+    // choices 
+    // 1 for new quad tree
+    // 2 for insert point 
+    // 3 for search a point
+    // 4 for range query
+    // 5 Exit
     int choice = 1;
     quadtree *qt = NULL;
     while (1)
