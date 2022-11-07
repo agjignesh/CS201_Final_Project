@@ -57,6 +57,7 @@ int ispointinregion(point* p,region* r){
         
         return 1;
     }
+    //printf("r2\n");
     return 0;
 }
 
@@ -85,23 +86,27 @@ int findregion(point*p, region* r){
     return 0;
 }
 
-bool box_intersect_check(region* b1,region* b2)
+int box_intersect_check(region* b1,region* b2)
 {
-    if(b1->p2->x >= b2->p1->x && b1->p2->x <= b2->p2->x)
+    if(b2->p1->x > b1->p1->x && b2->p2->x < b1->p2->x && b2->p1->y < b1->p1->y && b2->p3->y > b1->p3->y)
+        return 1;
+    else if(b2->p1->x < b1->p1->x && b2->p2->x > b1->p2->x && b2->p1->y > b1->p1->y && b2->p3->y < b1->p3->y)
+        return 2;
+    else if(b1->p2->x >= b2->p1->x && b1->p2->x <= b2->p2->x)
     {
         if(b1->p3->y <= b2->p1->y && b1->p3->y >= b2->p3->y)
-            return true;
+            return 1;
         else if(b1->p1->y <= b2->p1->y && b1->p1->y >= b2->p3->y)
-            return true;
+            return 1;
     }
     else if(b1->p1->x <= b2->p2->x && b1->p1->x >= b2->p1->x)
     {
         if(b1->p1->y <= b2->p1->y && b1->p1->y >= b2->p3->y)
-            return true;
+            return 1;
         else if(b1->p3->y <= b2->p1->y && b1->p3->y >= b2->p3->y)
-            return true;
+            return 1;
     }
-    return false;
+    return 0;
 }
 
 // quad tree
@@ -152,6 +157,7 @@ void insertquadtree(quadtree* qt,point* p){
             qt->ne= newquadtree(tophalf,qt->r->p2,righthalf,center);
             qt->se= newquadtree(center,righthalf,qt->r->p3,bottomhalf);
             qt->sw= newquadtree(lefthalf,center,bottomhalf,qt->r->p4);
+            printf("Point inserted \n");
         }
         else {
             // if there is a point in the tree then we insert the point in the appropriate child
@@ -170,8 +176,7 @@ void insertquadtree(quadtree* qt,point* p){
         }
     }
     else {
-
-        printf("point not in region");
+        printf("point not in region\n");
     }
 }
 
@@ -210,9 +215,13 @@ void range_query(quadtree* qt,region* re)
 {
     if(qt==NULL || qt->p==NULL)
         return;
-    if(!box_intersect_check(qt->r,re))
+    if(box_intersect_check(qt->r,re)==0)
     {
         return;
+    }
+    if(box_intersect_check(qt->r,re)==2)
+    {
+        re = qt->r;
     }
     if(ispointinregion(qt->p, re)==1)
     {
@@ -261,7 +270,7 @@ int main(){
             scanf("%f", &y);
             point *p = newpoint(x, y);
             insertquadtree(qt, p);
-            printf("Point inserted \n");
+            
         }
         else if (choice == 3)
         {
