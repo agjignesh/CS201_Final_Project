@@ -492,6 +492,8 @@ int main(int argc,const char* argv[]){
     int e= check_pixel_num(node);
     int f= num_tree_nodes(node);
     int PercentageCompresion = ((e-f)*100)/e;
+    cout<<"Original Pixel: "<<e<<endl;
+    cout<<"No.of Pixel after Compression: "<<f<<endl;
     cout<<"Compresion Ratio(in percentage): "<<PercentageCompresion<<"%"<<endl;
 
     decode_tree(node, modified, rows, cols);
