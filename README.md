@@ -46,4 +46,4 @@ Anurag Jaiswal
 | --------------- | ------------ |
 | Kritika Bansal | 2021CSB1184  |
 | Manik Gupta | 2021MCB1187  |
-| Jignesh Agrawal | 202MCB1181  |
+| Jignesh Agrawal | 2021MCB1181  |
