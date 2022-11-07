@@ -1,5 +1,20 @@
 # Quad Trees
 
+Our project shows the implementation of two types of quadtrees(Point quadtree and region quadtree) which is an adaptation of a binary tree but has four children.
+
+a. Point Quad Tree: 
+
+Operations performed on quadtrees in our project are as follows:
+
+1. Insert Node: This function is used to insert a new point in our quad tree
+2. Search node: This function is used to search for a particular point
+3. Range Query: This function is used to display the points present in the range given by the user.
+
+To support these operations, we have made various supporting functions.
+
+b. Region Quad Tree:
+
+We have implemented image compression using region quadtree.
 
 To download our program, please copy and paste this line to your terminal:
 ```
