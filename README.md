@@ -25,10 +25,6 @@ Build and install OpenCV in your machine if you already haven't. Here are guides
 * [For Windows](https://cv-tricks.com/how-to/installation-of-opencv-4-1-0-in-windows-10-from-source/)
 * [For MacOS](https://docs.opencv.org/master/d0/db2/tutorial_macos_install.html)
 
-***Linux***<br>
-After installing OpenCV, type ```make``` in your terminal. This will produce an output file ***test***. To run this file type ```./test``` in your terminal. If makefile gives error follow the steps mentioned for Windows.
-
-***Windows***<br>
 After installing OpenCV,type the below command in your terminal:
 ```
 g++ quadtree_image_compression.cpp -o test -std=c++11 `pkg-config --cflags --libs opencv`
